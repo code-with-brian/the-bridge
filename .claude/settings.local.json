@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mix:*)",
+      "Bash(yes)",
+      "Bash(curl -s \"https://hub.docker.com/v2/namespaces/hexpm/repositories/elixir/tags?page_size=10&name=1.18.4-erlang-27.2\")",
+      "Bash(bash /Users/brian.palmer/.claude/skills/railway-database/scripts/railway-api.sh 'query { project\\(id: \"\"\"\"435b02eb-a15d-44d1-88b2-799d70edc0b2\"\"\"\"\\) { services { edges { node { name serviceInstances { edges { node { latestDeployment { id status } } } } } } } } }' '{}')",
+      "Bash(curl -s \"https://hub.docker.com/v2/namespaces/hexpm/repositories/elixir/tags?page_size=10&name=1.18.4-erlang-27.2.4-ubuntu\")",
+      "Bash(curl -s \"https://hub.docker.com/v2/namespaces/hexpm/repositories/elixir/tags?page_size=20&name=1.18-erlang-27\")",
+      "Bash(curl -s https://the-bridge-production-305e.up.railway.app/)"
+    ]
+  }
+}
