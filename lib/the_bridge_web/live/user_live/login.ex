@@ -7,8 +7,12 @@ defmodule TheBridgeWeb.UserLive.Login do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="mx-auto max-w-sm space-y-4">
-        <div class="text-center">
+      <div class="min-h-[80vh] flex items-center justify-center">
+        <div class="bg-base-100 shadow-xl border border-base-300/50 max-w-md w-full p-8 rounded-xl space-y-4">
+        <div class="text-center mb-2">
+          <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
+            <span class="text-primary-content font-bold text-sm">B</span>
+          </div>
           <.header>
             <p>Log in</p>
             <:subtitle>
@@ -90,6 +94,7 @@ defmodule TheBridgeWeb.UserLive.Login do
             Log in only this time
           </.button>
         </.form>
+      </div>
       </div>
     </Layouts.app>
     """

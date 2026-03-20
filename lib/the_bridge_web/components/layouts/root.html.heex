@@ -7,6 +7,9 @@
     <.live_title default="The Bridge" suffix=" · Connecting Generosity with Need">
       {assigns[:page_title]}
     </.live_title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
     </script>
@@ -30,72 +33,94 @@
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <nav class="navbar bg-base-100 border-b border-base-300 px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="btn btn-ghost text-xl font-bold gap-2">
-          <.icon name="hero-heart" class="size-6 text-primary" />
-          The Bridge
+    <nav class="sticky top-0 z-50 border-b border-base-300/40 bg-base-100/80 backdrop-blur-md">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2.5 group">
+          <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <span class="text-primary-content font-bold text-sm">B</span>
+          </div>
+          <span class="font-serif text-lg font-bold tracking-tight">The Bridge</span>
         </a>
-      </div>
-      <div class="flex-none">
-        <ul class="menu menu-horizontal px-1 items-center gap-1">
-          <li><a href="/needs">Needs</a></li>
-          <li><a href="/clients">People</a></li>
-          <li><a href="/impact">Impact</a></li>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/needs" class="text-sm font-medium text-base-content/60 hover:text-primary transition-colors">Needs</a>
+          <a href="/clients" class="text-sm font-medium text-base-content/60 hover:text-primary transition-colors">People</a>
+          <a href="/impact" class="text-sm font-medium text-base-content/60 hover:text-primary transition-colors">Impact</a>
           <%= if @current_scope && @current_scope.user do %>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li class="text-sm text-base-content/50">{@current_scope.user.email}</li>
-            <li>
-              <.link href={~p"/users/log-out"} method="delete" class="btn btn-ghost btn-sm">
-                Log out
-              </.link>
-            </li>
+            <a href="/dashboard" class="text-sm font-medium text-base-content/60 hover:text-primary transition-colors">Dashboard</a>
+            <span class="text-sm text-base-content/40">{@current_scope.user.email}</span>
+            <.link href={~p"/users/log-out"} method="delete" class="text-sm font-medium text-base-content/60 hover:text-primary transition-colors">
+              Log out
+            </.link>
           <% else %>
-            <li>
-              <.link href={~p"/users/register"} class="btn btn-ghost btn-sm">Register</.link>
-            </li>
-            <li><.link href={~p"/users/log-in"} class="btn btn-primary btn-sm">Log in</.link></li>
+            <.link href={~p"/users/register"} class="text-sm font-medium text-base-content/60 hover:text-primary transition-colors">Register</.link>
+            <.link href={~p"/users/log-in"} class="btn btn-primary btn-sm shadow-lg shadow-primary/20 hover:shadow-primary/40">Log in</.link>
           <% end %>
-        </ul>
+        </div>
+        <div class="md:hidden dropdown dropdown-end">
+          <label tabindex="0" class="btn btn-ghost btn-sm">
+            <.icon name="hero-bars-3" class="size-5" />
+          </label>
+          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box shadow-lg w-52 p-2 mt-2 border border-base-300/50">
+            <li><a href="/needs">Needs</a></li>
+            <li><a href="/clients">People</a></li>
+            <li><a href="/impact">Impact</a></li>
+            <%= if @current_scope && @current_scope.user do %>
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><.link href={~p"/users/log-out"} method="delete">Log out</.link></li>
+            <% else %>
+              <li><.link href={~p"/users/register"}>Register</.link></li>
+              <li><.link href={~p"/users/log-in"}>Log in</.link></li>
+            <% end %>
+          </ul>
+        </div>
       </div>
     </nav>
     <div class="flex-1">
       {@inner_content}
     </div>
-    <footer class="bg-base-300 text-base-content mt-auto">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer class="bg-base-200/50 border-t border-base-300/50 text-base-content mt-auto">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div class="flex items-center gap-2 mb-3">
-              <.icon name="hero-heart" class="size-5 text-primary" />
-              <span class="text-lg font-bold">The Bridge</span>
+            <div class="flex items-center gap-2.5 mb-3">
+              <div class="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
+                <span class="text-primary-content font-bold text-xs">B</span>
+              </div>
+              <span class="font-serif text-lg font-bold">The Bridge</span>
             </div>
-            <p class="text-sm text-base-content/70">
+            <p class="text-sm text-base-content/60 leading-relaxed">
               Connecting community generosity with the verified needs
               of individuals experiencing homelessness.
             </p>
-            <p class="text-sm text-base-content/50 mt-2">
+            <p class="text-sm text-base-content/40 mt-2">
               Peterborough, Ontario
             </p>
           </div>
           <div>
-            <h3 class="font-semibold mb-3">Quick Links</h3>
+            <h3 class="font-semibold mb-3 text-sm uppercase tracking-wider text-base-content/50">Quick Links</h3>
             <ul class="space-y-2 text-sm">
-              <li><a href="/needs" class="link link-hover">Browse Needs</a></li>
-              <li><a href="/impact" class="link link-hover">Our Impact</a></li>
-              <li><a href="/users/register" class="link link-hover">Get Started</a></li>
+              <li><a href="/needs" class="text-base-content/60 hover:text-primary transition-colors">Browse Needs</a></li>
+              <li><a href="/impact" class="text-base-content/60 hover:text-primary transition-colors">Our Impact</a></li>
+              <li><a href="/users/register" class="text-base-content/60 hover:text-primary transition-colors">Get Started</a></li>
             </ul>
           </div>
           <div>
-            <h3 class="font-semibold mb-3">Transparency</h3>
-            <p class="text-sm text-base-content/70">
+            <h3 class="font-semibold mb-3 text-sm uppercase tracking-wider text-base-content/50">Transparency</h3>
+            <p class="text-sm text-base-content/60 leading-relaxed">
               Every donation is tracked and verified. Agencies are vetted
               before joining the platform. You can see exactly where your
               money goes.
             </p>
           </div>
+          <div>
+            <h3 class="font-semibold mb-3 text-sm uppercase tracking-wider text-base-content/50">Community</h3>
+            <ul class="space-y-2 text-sm">
+              <li><a href="/impact" class="text-base-content/60 hover:text-primary transition-colors">Impact Dashboard</a></li>
+              <li><a href="/clients" class="text-base-content/60 hover:text-primary transition-colors">People We Serve</a></li>
+            </ul>
+          </div>
         </div>
-        <div class="border-t border-base-content/10 mt-8 pt-6 text-center text-sm text-base-content/50">
+        <div class="border-t border-base-300/50 mt-10 pt-6 text-center text-sm text-base-content/40">
           Built with transparency in Peterborough, ON
         </div>
       </div>

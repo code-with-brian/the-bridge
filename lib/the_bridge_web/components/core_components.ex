@@ -94,7 +94,7 @@ defmodule TheBridgeWeb.CoreComponents do
   slot :inner_block, required: true
 
   def button(%{rest: rest} = assigns) do
-    variants = %{"primary" => "btn-primary", nil => "btn-primary btn-soft"}
+    variants = %{"primary" => "btn-primary shadow-sm shadow-primary/10 hover:shadow-primary/30 transition-all duration-200", nil => "btn-primary btn-soft"}
 
     assigns =
       assign_new(assigns, :class, fn ->

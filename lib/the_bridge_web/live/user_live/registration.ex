@@ -8,8 +8,12 @@ defmodule TheBridgeWeb.UserLive.Registration do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="mx-auto max-w-sm">
-        <div class="text-center">
+      <div class="min-h-[80vh] flex items-center justify-center">
+        <div class="bg-base-100 shadow-xl border border-base-300/50 max-w-md w-full p-8 rounded-xl">
+        <div class="text-center mb-2">
+          <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
+            <span class="text-primary-content font-bold text-sm">B</span>
+          </div>
           <.header>
             Register for an account
             <:subtitle>
@@ -44,6 +48,7 @@ defmodule TheBridgeWeb.UserLive.Registration do
             Create an account
           </.button>
         </.form>
+      </div>
       </div>
     </Layouts.app>
     """

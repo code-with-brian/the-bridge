@@ -29,75 +29,100 @@ defmodule TheBridgeWeb.NeedLive.Show do
   def render(assigns) do
     ~H"""
     <div class="space-y-6">
-      <.link navigate={~p"/needs"} class="btn btn-ghost btn-sm">
-        &larr; Back to Needs
+      <.link navigate={~p"/needs"} class="text-sm text-base-content/50 hover:text-primary transition-colors inline-flex items-center gap-1">
+        <.icon name="hero-arrow-left" class="size-3.5" /> Back to Needs
       </.link>
 
-      <div class="card bg-base-200">
-        <div class="card-body">
-          <div class="flex gap-2 mb-2">
-            <span class="badge">{@need.category}</span>
-            <span :if={@need.priority == "urgent"} class="badge badge-error">Urgent</span>
-            <span :if={@need.priority == "high"} class="badge badge-warning">High</span>
-          </div>
-          <h1 class="card-title text-2xl">{@need.title}</h1>
-          <p :if={@need.description} class="mt-2">{@need.description}</p>
-
-          <div class="mt-4">
-            <div class="flex justify-between text-sm mb-1">
-              <span>${format_cents(@need.funded_cents)} raised</span>
-              <span>${format_cents(@need.amount_cents)} goal</span>
+      <div class="grid lg:grid-cols-3 gap-8">
+        <%!-- Left column: details --%>
+        <div class="lg:col-span-2 space-y-6">
+          <div class="bg-base-100 rounded-xl border border-base-300/50 p-6 md:p-8">
+            <div class="flex gap-2 mb-3">
+              <span class="badge bg-primary/10 text-primary border-0 text-xs">{@need.category}</span>
+              <span :if={@need.priority == "urgent"} class="badge badge-error text-xs">Urgent</span>
+              <span :if={@need.priority == "high"} class="badge badge-warning text-xs">High</span>
             </div>
-            <progress
-              class="progress progress-primary w-full"
-              value={@need.funded_cents}
-              max={@need.amount_cents}
-            />
-            <p class="text-sm text-base-content/50 mt-1">
-              {funding_percentage(@need)}% funded
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">{@need.title}</h1>
+            <p class="text-sm text-base-content/50 mb-4">
+              For <.link navigate={~p"/clients/#{@need.client.bridge_id}"} class="text-primary hover:underline">{@need.client.alias_name}</.link>
             </p>
+            <p :if={@need.description} class="text-base-content/70 leading-relaxed">{@need.description}</p>
           </div>
 
-          <div :if={@need.status in ~w(open partially_funded)} class="card-actions justify-end mt-4">
-            <.link navigate={~p"/needs/#{@need.id}/donate"} class="btn btn-primary">
-              Donate Now
-            </.link>
-          </div>
-
-          <div :if={@need.status == "funded"} class="alert alert-success mt-4">
-            This need has been fully funded! Thank you to all donors.
-          </div>
-
-          <div :if={@need.status == "fulfilled"} class="alert alert-success mt-4">
-            This need has been fulfilled!
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-4">
-        <.link navigate={~p"/clients/#{@need.client.bridge_id}"} class="link">
-          View {@need.client.alias_name}'s profile
-        </.link>
-      </div>
-
-      <section :if={@donations != []}>
-        <h2 class="text-lg font-bold mb-4">Donations ({length(@donations)})</h2>
-        <div class="space-y-2">
-          <div
-            :for={donation <- @donations}
-            class="flex justify-between items-center py-2 border-b border-base-300"
-          >
-            <div>
-              <span :if={donation.anonymous}>Anonymous</span>
-              <span :if={!donation.anonymous && donation.donor_id}>A donor</span>
-              <span :if={donation.message} class="text-sm text-base-content/70 ml-2">
-                "{donation.message}"
-              </span>
+          <section :if={@donations != []} class="bg-base-100 rounded-xl border border-base-300/50 p-6 md:p-8">
+            <h2 class="text-lg font-bold mb-4">Donations ({length(@donations)})</h2>
+            <div class="space-y-0">
+              <div
+                :for={donation <- @donations}
+                class="flex justify-between items-center py-3 border-b border-base-300/50 last:border-0"
+              >
+                <div>
+                  <span :if={donation.anonymous} class="font-medium">Anonymous</span>
+                  <span :if={!donation.anonymous && donation.donor_id} class="font-medium">A donor</span>
+                  <span :if={donation.message} class="text-sm text-base-content/60 ml-2">
+                    "{donation.message}"
+                  </span>
+                </div>
+                <span class="font-semibold">${format_cents(donation.amount_cents)}</span>
+              </div>
             </div>
-            <span class="font-semibold">${format_cents(donation.amount_cents)}</span>
+          </section>
+        </div>
+
+        <%!-- Right column: sticky sidebar --%>
+        <div class="lg:col-span-1">
+          <div class="sticky top-24 space-y-4">
+            <div class="bg-base-100 rounded-xl border border-base-300/50 p-6 shadow-sm">
+              <div class="mb-4">
+                <div class="flex justify-between text-sm mb-1.5">
+                  <span class="font-semibold">${format_cents(@need.funded_cents)} raised</span>
+                  <span class="text-base-content/50">${format_cents(@need.amount_cents)} goal</span>
+                </div>
+                <progress
+                  class="progress progress-primary w-full"
+                  value={@need.funded_cents}
+                  max={@need.amount_cents}
+                />
+                <p class="text-sm text-base-content/50 mt-1.5">
+                  {funding_percentage(@need)}% funded
+                </p>
+              </div>
+
+              <div :if={@need.status in ~w(open partially_funded)}>
+                <.link navigate={~p"/needs/#{@need.id}/donate"} class="btn btn-primary w-full shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all duration-300">
+                  Donate Now
+                </.link>
+              </div>
+
+              <div :if={@need.status == "funded"} class="alert alert-success">
+                This need has been fully funded!
+              </div>
+
+              <div :if={@need.status == "fulfilled"} class="alert alert-success">
+                This need has been fulfilled!
+              </div>
+            </div>
+
+            <div class="bg-base-100 rounded-xl border border-base-300/50 p-5">
+              <h3 class="text-sm font-semibold mb-3 text-base-content/70">Trust & Safety</h3>
+              <ul class="space-y-2 text-sm text-base-content/60">
+                <li class="flex items-center gap-2">
+                  <.icon name="hero-check-badge" class="size-4 text-success shrink-0" />
+                  Verified by partner agency
+                </li>
+                <li class="flex items-center gap-2">
+                  <.icon name="hero-shield-check" class="size-4 text-success shrink-0" />
+                  Funds tracked transparently
+                </li>
+                <li class="flex items-center gap-2">
+                  <.icon name="hero-eye" class="size-4 text-success shrink-0" />
+                  Fulfillment updates provided
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
     """
   end

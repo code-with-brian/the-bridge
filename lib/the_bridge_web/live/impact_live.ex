@@ -29,19 +29,23 @@ defmodule TheBridgeWeb.ImpactLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="space-y-6">
-      <h1 class="text-2xl font-bold">{@page_title}</h1>
-
-      <div :if={@agency} class="mb-4">
-        <p class="text-base-content/70">{@agency.description}</p>
+    <div class="space-y-8">
+      <div class="bg-base-200/30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-16 border-b border-base-300/50 mb-8">
+        <div class="max-w-5xl mx-auto">
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">{@page_title}</h1>
+          <p :if={@agency} class="text-base-content/60">{@agency.description}</p>
+          <p :if={!@agency} class="text-base-content/60">See the real impact of community generosity.</p>
+        </div>
       </div>
 
-      <div :if={!@agency} class="stats stats-vertical lg:stats-horizontal shadow w-full">
+      <div :if={!@agency} class="stats stats-vertical lg:stats-horizontal shadow-sm border border-base-300/50 w-full">
         <div class="stat">
+          <div class="stat-figure text-primary"><.icon name="hero-heart" class="size-7" /></div>
           <div class="stat-title">Total Donated</div>
           <div class="stat-value text-primary">${format_cents(@stats.total_donated_cents)}</div>
         </div>
         <div class="stat">
+          <div class="stat-figure text-secondary"><.icon name="hero-users" class="size-7" /></div>
           <div class="stat-title">Donors</div>
           <div class="stat-value">{@stats.total_donors}</div>
         </div>
@@ -55,7 +59,7 @@ defmodule TheBridgeWeb.ImpactLive do
         </div>
       </div>
 
-      <div :if={@agency} class="stats stats-vertical lg:stats-horizontal shadow w-full">
+      <div :if={@agency} class="stats stats-vertical lg:stats-horizontal shadow-sm border border-base-300/50 w-full">
         <div class="stat">
           <div class="stat-title">Clients</div>
           <div class="stat-value">{@stats.total_clients}</div>
@@ -75,12 +79,12 @@ defmodule TheBridgeWeb.ImpactLive do
       </div>
 
       <section :if={@categories != []}>
-        <h2 class="text-lg font-bold mb-4">Needs by Category</h2>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-          <div :for={cat <- @categories} class="card bg-base-200 p-3 text-center">
-            <div class="font-bold text-lg">{cat.count}</div>
-            <div class="text-sm text-base-content/70">{String.capitalize(cat.category)}</div>
-            <div class="text-xs">${format_cents(cat.funded_cents || 0)} funded</div>
+        <h2 class="text-xl font-bold mb-4">Needs by Category</h2>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div :for={cat <- @categories} class="bg-base-100 rounded-xl border border-base-300/50 p-4 text-center hover:shadow-md transition-shadow">
+            <div class="font-bold text-2xl text-primary">{cat.count}</div>
+            <div class="text-sm text-base-content/60 mt-1">{String.capitalize(cat.category)}</div>
+            <div class="text-xs text-base-content/40 mt-0.5">${format_cents(cat.funded_cents || 0)} funded</div>
           </div>
         </div>
       </section>
