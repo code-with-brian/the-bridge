@@ -61,15 +61,30 @@ defmodule TheBridgeWeb.NeedLive.Index do
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div :for={need <- @needs} class="card bg-base-100 border border-base-300/60 hover:border-primary/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+          <div :for={need <- @needs} class="card bg-base-100 border border-base-300/60 hover:border-primary/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+            <div class="relative h-48 overflow-hidden">
+              <img
+                src={need_image(need.category)}
+                alt=""
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <span class="absolute top-3 left-3 badge bg-base-100/90 backdrop-blur-sm border-0 text-xs">
+                {need.category}
+              </span>
+              <span :if={need.priority == "urgent"} class="absolute top-3 right-3 badge badge-error text-xs">
+                Urgent
+              </span>
+              <span :if={need.priority == "high"} class="absolute top-3 right-3 badge badge-warning text-xs">
+                High
+              </span>
+            </div>
             <div class="card-body">
-              <div class="flex gap-2">
-                <span class="badge bg-primary/10 text-primary border-0 text-xs">{need.category}</span>
-                <span :if={need.priority == "urgent"} class="badge badge-error text-xs">Urgent</span>
-                <span :if={need.priority == "high"} class="badge badge-warning text-xs">High</span>
-              </div>
               <h3 class="card-title text-base">{need.title}</h3>
-              <p class="text-sm text-base-content/60">{need.client.alias_name}</p>
+              <p class="text-sm text-base-content/60 flex items-center gap-1">
+                <.icon name="hero-check-badge-solid" class="size-4 text-success" />
+                Verified — {need.client.alias_name}
+              </p>
               <div class="mt-3">
                 <div class="flex justify-between text-sm mb-1.5">
                   <span class="font-bold">${format_cents(need.funded_cents)}</span>
@@ -97,6 +112,15 @@ defmodule TheBridgeWeb.NeedLive.Index do
       </div>
     </div>
     """
+  end
+
+  defp need_image(category) do
+    case category do
+      "housing" -> ~p"/images/Empty_sunny_apartment_49030cce.png"
+      cat when cat in ~w(medical health) -> ~p"/images/Medical_glasses_and_papers_7afb4b5c.png"
+      cat when cat in ~w(education employment) -> ~p"/images/Study_materials_on_table_a3761546.png"
+      _ -> ~p"/images/Community_support_in_park_ff7ec8ed.png"
+    end
   end
 
   defp format_cents(cents) when is_integer(cents) do
